@@ -63,7 +63,7 @@ const css = `
   color: #ffffff;
   background: #003e9a;
   border-radius: 20px 0 0 0;
-  font-size: 32.045pt;
+  font-size: 24.034pt;
   font-weight: 600;
   line-height: 1.2;
   white-space: pre-wrap;

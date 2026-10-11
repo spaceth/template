@@ -52,7 +52,7 @@ const css = `
   color: #ffffff;
   background: #003e9a;
   border-radius: 20px 0 0 0;
-  font-size: 12.818pt;
+  font-size: 9.614pt;
   font-weight: 600;
   line-height: 1.2;
   text-align: left;

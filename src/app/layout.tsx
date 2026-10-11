@@ -16,6 +16,15 @@ export const metadata: Metadata = {
     title: "Thai PBS Sci & Tech — Image templates",
     description: "Create Sci & Tech social and website images in the browser",
     type: "website",
+    images: [
+      {
+        url: "https://sci-and-tech.template.spaceth.co/opengraph-image.jpg",
+        width: 1195,
+        height: 685,
+        alt: "Thai PBS Sci & Tech — Image templates",
+        type: "image/jpeg",
+      },
+    ],
   },
 };
 

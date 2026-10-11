@@ -331,36 +331,44 @@ export function Studio() {
             ) : null}
           </div>
 
-          <Field
-            label="Credit"
-            hint="Photo credit"
-            value={fields.credit}
-            placeholder="e.g. NASA/JPL-Caltech"
-            onChange={(credit) => setFields((current) => ({ ...current, credit }))}
-          />
-          <Field
-            label="Column"
-            hint="Category"
-            value={fields.column}
-            placeholder="e.g. Science"
-            onChange={(column) => setFields((current) => ({ ...current, column }))}
-          />
-          <Field
-            label="Header"
-            hint="Headline"
-            value={fields.header}
-            placeholder="Main headline on the image"
-            multiline
-            onChange={(header) => setFields((current) => ({ ...current, header }))}
-          />
-          <Field
-            label="Sub-Header"
-            hint="Standfirst"
-            value={fields.subHeader}
-            placeholder="Short standfirst"
-            multiline
-            onChange={(subHeader) => setFields((current) => ({ ...current, subHeader }))}
-          />
+          {spec.fields.includes("credit") ? (
+            <Field
+              label="Credit"
+              hint="Photo credit"
+              value={fields.credit}
+              placeholder="e.g. NASA/JPL-Caltech"
+              onChange={(credit) => setFields((current) => ({ ...current, credit }))}
+            />
+          ) : null}
+          {spec.fields.includes("column") ? (
+            <Field
+              label="Column"
+              hint="Category"
+              value={fields.column}
+              placeholder="e.g. Science"
+              onChange={(column) => setFields((current) => ({ ...current, column }))}
+            />
+          ) : null}
+          {spec.fields.includes("header") ? (
+            <Field
+              label="Header"
+              hint="Headline"
+              value={fields.header}
+              placeholder="Main headline on the image"
+              multiline
+              onChange={(header) => setFields((current) => ({ ...current, header }))}
+            />
+          ) : null}
+          {spec.fields.includes("subHeader") ? (
+            <Field
+              label="Sub-Header"
+              hint="Standfirst"
+              value={fields.subHeader}
+              placeholder="Short standfirst"
+              multiline
+              onChange={(subHeader) => setFields((current) => ({ ...current, subHeader }))}
+            />
+          ) : null}
 
           {error ? (
             <p className="studio__error" role="alert">
