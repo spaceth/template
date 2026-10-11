@@ -1,6 +1,7 @@
 import overlay from "./website-overlay.png";
 import { CoverImage } from "./cover-image";
 import { Slot } from "./slot";
+import { SubHeader } from "./sub-header";
 import type { TemplateProps } from "./types";
 
 /**
@@ -52,7 +53,7 @@ const css = `
   color: #ffffff;
   background: #003e9a;
   border-radius: 20px 0 0 0;
-  font-size: 9.614pt;
+  font-size: 21px;
   font-weight: 600;
   line-height: 1.2;
   text-align: left;
@@ -126,7 +127,7 @@ export function WebsiteTemplate({
       <Slot as="p" className="sci-website__column" aboveOverlay value={column} />
       <div className="sci-website__copy" data-export-above-overlay>
         <Slot as="h1" className="sci-website__header" value={header} />
-        <Slot as="p" className="sci-website__sub" value={subHeader} />
+        <SubHeader className="sci-website__sub" value={subHeader} />
       </div>
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img

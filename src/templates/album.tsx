@@ -1,6 +1,7 @@
 import overlay from "./album-overlay.png";
 import { CoverImage } from "./cover-image";
 import { Slot } from "./slot";
+import { SubHeader } from "./sub-header";
 import type { TemplateProps } from "./types";
 
 /**
@@ -129,7 +130,7 @@ export function AlbumTemplate({
       <div className="sci-album__copy">
         <Slot as="p" className="sci-album__column" value={column} />
         <Slot as="h1" className="sci-album__header" value={header} />
-        <Slot as="p" className="sci-album__sub" value={subHeader} />
+        <SubHeader className="sci-album__sub" value={subHeader} />
       </div>
       {/* Frame artwork sits above the photo and text. */}
       {/* eslint-disable-next-line @next/next/no-img-element */}

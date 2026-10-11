@@ -1,6 +1,7 @@
 import overlay from "./single-overlay.png";
 import { CoverImage } from "./cover-image";
 import { Slot } from "./slot";
+import { SubHeader } from "./sub-header";
 import type { TemplateProps } from "./types";
 
 /**
@@ -63,7 +64,7 @@ const css = `
   color: #ffffff;
   background: #003e9a;
   border-radius: 20px 0 0 0;
-  font-size: 24.034pt;
+  font-size: 20pt;
   font-weight: 600;
   line-height: 1.2;
   white-space: pre-wrap;
@@ -125,7 +126,7 @@ export function SingleTemplate({
       <div className="sci-single__copy" data-export-above-overlay>
         <Slot as="p" className="sci-single__column" value={column} />
         <Slot as="h1" className="sci-single__header" value={header} />
-        <Slot as="p" className="sci-single__sub" value={subHeader} />
+        <SubHeader className="sci-single__sub" value={subHeader} />
         <Slot as="p" className="sci-single__credit" value={credit} />
       </div>
       {/* eslint-disable-next-line @next/next/no-img-element */}

@@ -387,6 +387,11 @@ textarea {
   text-align: center;
 }
 
+/* Sub-Header text after the user's line break is 20% smaller on every template. */
+.sub-header__next {
+  font-size: 80%;
+}
+
 .export-root {
   position: fixed;
   /* Kept far offscreen so it never covers the preview on a narrow window. */
