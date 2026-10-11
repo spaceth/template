@@ -18,7 +18,7 @@ Frame artwork for each card lives next to the template as `single-overlay.png`, 
 
 1. Open the studio and pick Single, Album, or Website.
 2. Add a photo by clicking the drop zone or dragging a file onto the page. Any image size is accepted. The file stays in the browser.
-3. Reframe the photo on the preview. Drag to move it. Use the zoom slider to crop in, or zoom out as far as −40% so the subject can sit clear of the overlay. **รีเซ็ตตำแหน่งรูป** returns the photo to a centered crop.
+3. Reframe the photo on the preview. Drag to move it. Use the zoom slider to crop in, or zoom out as far as −40% so the subject can sit clear of the overlay. **Reset framing** returns the photo to a centered crop.
 4. Fill in Credit, Column, Header, and Sub-Header. Empty fields are left off the card.
 5. Download a PNG at the template’s exact pixel size.
 

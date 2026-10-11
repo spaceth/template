@@ -10,13 +10,18 @@ const kanit = Kanit({
 });
 
 export const metadata: Metadata = {
-  title: "Thai PBS Sci & Tech — แม่แบบภาพ",
-  description: "สร้างภาพโซเชียลและเว็บไซต์ Sci & Tech ในเบราว์เซอร์",
+  title: "Thai PBS Sci & Tech — Image templates",
+  description: "Create Sci & Tech social and website images in the browser",
+  openGraph: {
+    title: "Thai PBS Sci & Tech — Image templates",
+    description: "Create Sci & Tech social and website images in the browser",
+    type: "website",
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="th" className={kanit.variable}>
+    <html lang="en" className={kanit.variable}>
       <body className={kanit.className}>{children}</body>
     </html>
   );

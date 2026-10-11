@@ -116,20 +116,26 @@ export function SingleTemplate({
   return (
     <article className="sci-single">
       <style>{css}</style>
-      <div className="sci-single__media">
+      <div className="sci-single__media" data-export-under-overlay>
         {imageUrl ? (
           <CoverImage src={imageUrl} width={1080} height={1350} frame={frame} />
         ) : null}
       </div>
-      <div className="sci-single__scrim" />
-      <div className="sci-single__copy">
+      <div className="sci-single__scrim" data-export-under-overlay />
+      <div className="sci-single__copy" data-export-above-overlay>
         <Slot as="p" className="sci-single__column" value={column} />
         <Slot as="h1" className="sci-single__header" value={header} />
         <Slot as="p" className="sci-single__sub" value={subHeader} />
         <Slot as="p" className="sci-single__credit" value={credit} />
       </div>
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img className="sci-single__overlay" src={overlay.src} alt="" draggable={false} />
+      <img
+        className="sci-single__overlay"
+        data-export-overlay="under"
+        src={overlay.src}
+        alt=""
+        draggable={false}
+      />
     </article>
   );
 }

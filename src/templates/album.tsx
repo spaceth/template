@@ -133,7 +133,13 @@ export function AlbumTemplate({
       </div>
       {/* Frame artwork sits above the photo and text. */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img className="sci-album__overlay" src={overlay.src} alt="" draggable={false} />
+      <img
+        className="sci-album__overlay"
+        data-export-overlay="over"
+        src={overlay.src}
+        alt=""
+        draggable={false}
+      />
     </article>
   );
 }

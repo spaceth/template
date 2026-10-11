@@ -117,19 +117,25 @@ export function WebsiteTemplate({
   return (
     <article className="sci-website">
       <style>{css}</style>
-      <div className="sci-website__media">
+      <div className="sci-website__media" data-export-under-overlay>
         {imageUrl ? (
           <CoverImage src={imageUrl} width={1250} height={700} frame={frame} />
         ) : null}
       </div>
-      <Slot as="p" className="sci-website__credit" value={credit} />
-      <Slot as="p" className="sci-website__column" value={column} />
-      <div className="sci-website__copy">
+      <Slot as="p" className="sci-website__credit" aboveOverlay value={credit} />
+      <Slot as="p" className="sci-website__column" aboveOverlay value={column} />
+      <div className="sci-website__copy" data-export-above-overlay>
         <Slot as="h1" className="sci-website__header" value={header} />
         <Slot as="p" className="sci-website__sub" value={subHeader} />
       </div>
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img className="sci-website__overlay" src={overlay.src} alt="" draggable={false} />
+      <img
+        className="sci-website__overlay"
+        data-export-overlay="under"
+        src={overlay.src}
+        alt=""
+        draggable={false}
+      />
     </article>
   );
 }

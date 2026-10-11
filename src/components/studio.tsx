@@ -11,16 +11,16 @@ function zoomLabel(zoom: number) {
   return percent > 0 ? `+${percent}%` : `${percent}%`;
 }
 
-const emptyFields = {
-  credit: "",
-  column: "",
-  header: "",
-  subHeader: "",
+const defaultFields = {
+  credit: "NASA/JPL-Caltech",
+  column: "Out of This World",
+  header: "หัวข้อข่าว",
+  subHeader: "คำโปรยจากเนื้อหาข่าว",
 };
 
 export function Studio() {
   const [templateId, setTemplateId] = useState<TemplateId>("single");
-  const [fields, setFields] = useState(emptyFields);
+  const [fields, setFields] = useState(defaultFields);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [natural, setNatural] = useState<{ w: number; h: number } | null>(null);
   const [frame, setFrame] = useState<ImageFrame>(defaultFrame);
@@ -46,7 +46,7 @@ export function Studio() {
 
   const acceptFile = useCallback((file: File) => {
     if (!file.type.startsWith("image/")) {
-      setError("ใช้ได้เฉพาะไฟล์รูปภาพ");
+      setError("Only image files can be used");
       return;
     }
     const reader = new FileReader();
@@ -60,10 +60,10 @@ export function Studio() {
         setFileName(file.name);
         setError(null);
       };
-      probe.onerror = () => setError("เปิดไฟล์รูปนี้ไม่ได้");
+      probe.onerror = () => setError("This image could not be opened");
       probe.src = url;
     };
-    reader.onerror = () => setError("เปิดไฟล์รูปนี้ไม่ได้");
+    reader.onerror = () => setError("This image could not be opened");
     reader.readAsDataURL(file);
   }, []);
 
@@ -183,9 +183,8 @@ export function Studio() {
         ),
       );
       await waitForCover(article);
-      const { toBlob } = await import("html-to-image");
       const fontEmbedCSS = await inlineUsedFonts(article);
-      const blob = await toBlob(article, {
+      const canvas = await renderCard(article, {
         width: spec.width,
         height: spec.height,
         canvasWidth: spec.width,
@@ -194,6 +193,9 @@ export function Studio() {
         cacheBust: false,
         skipAutoScale: true,
         fontEmbedCSS,
+      });
+      const blob = await new Promise<Blob | null>((resolve) => {
+        canvas.toBlob(resolve, "image/png");
       });
       if (!blob) throw new Error("empty image");
       const url = URL.createObjectURL(blob);
@@ -204,7 +206,7 @@ export function Studio() {
       URL.revokeObjectURL(url);
     } catch (error) {
       console.error(error);
-      setError("สร้างภาพไม่สำเร็จ ลองอีกครั้ง");
+      setError("Could not create the image. Try again.");
     } finally {
       setDownloading(false);
     }
@@ -218,13 +220,13 @@ export function Studio() {
         <div className="studio__brand">
           <span className="studio__mark" />
           <div>
-            <p className="studio__kicker">ไทยพีบีเอส Sci & Tech</p>
-            <h1 className="studio__title">แม่แบบภาพ</h1>
+            <p className="studio__kicker">Thai PBS Sci & Tech</p>
+            <h1 className="studio__title">Image templates</h1>
           </div>
         </div>
       </header>
 
-      <div className="studio__picker" role="radiogroup" aria-label="เลือกแม่แบบ">
+      <div className="studio__picker" role="radiogroup" aria-label="Choose a template">
         {templates.map((template) => {
           const selected = template.id === spec.id;
           return (
@@ -252,10 +254,10 @@ export function Studio() {
       </div>
 
       <div className="studio__body">
-        <section className="studio__form" aria-label="เนื้อหาบนภาพ">
+        <section className="studio__form" aria-label="Card content">
           <div className="field">
             <div className="field__label">
-              <span>รูปภาพ</span>
+              <span>Photo</span>
             </div>
             <label className="dropzone">
               <input
@@ -275,25 +277,25 @@ export function Studio() {
                   <img src={imageUrl} alt="" />
                   <span>
                     <strong>{fileName}</strong>
-                    <span>คลิกหรือวางรูปใหม่เพื่อเปลี่ยน</span>
+                    <span>Click or drop a new photo to replace</span>
                   </span>
                 </span>
               ) : (
                 <span className="dropzone__empty">
-                  <strong>ลากรูปมาวาง หรือคลิกเพื่อเลือกไฟล์</strong>
+                  <strong>Drag a photo here, or click to choose a file</strong>
                   <span>PNG, JPG, WEBP</span>
                 </span>
               )}
             </label>
             {imageUrl ? (
               <button type="button" className="text-button" onClick={clearImage}>
-                เอารูปออก
+                Remove photo
               </button>
             ) : null}
             {imageUrl && natural ? (
               <div className="frame-controls">
                 <label className="field__label" htmlFor="zoom">
-                  <span>ซูม</span>
+                  <span>Zoom</span>
                   <span className="field__hint">{zoomLabel(frame.zoom)}</span>
                 </label>
                 <input
@@ -317,13 +319,13 @@ export function Studio() {
                     );
                   }}
                 />
-                <p className="studio__note">ลากบนภาพตัวอย่างเพื่อเลื่อนรูป</p>
+                <p className="studio__note">Drag the preview to move the photo</p>
                 <button
                   type="button"
                   className="text-button"
                   onClick={() => setFrame(defaultFrame)}
                 >
-                  รีเซ็ตตำแหน่งรูป
+                  Reset framing
                 </button>
               </div>
             ) : null}
@@ -331,31 +333,31 @@ export function Studio() {
 
           <Field
             label="Credit"
-            hint="เครดิต"
+            hint="Photo credit"
             value={fields.credit}
-            placeholder="เช่น ภาพ: NASA / Thai PBS"
+            placeholder="e.g. NASA/JPL-Caltech"
             onChange={(credit) => setFields((current) => ({ ...current, credit }))}
           />
           <Field
             label="Column"
-            hint="คอลัมน์"
+            hint="Category"
             value={fields.column}
-            placeholder="เช่น วิทยาศาสตร์"
+            placeholder="e.g. Science"
             onChange={(column) => setFields((current) => ({ ...current, column }))}
           />
           <Field
             label="Header"
-            hint="หัวข้อ"
+            hint="Headline"
             value={fields.header}
-            placeholder="หัวข้อหลักบนภาพ"
+            placeholder="Main headline on the image"
             multiline
             onChange={(header) => setFields((current) => ({ ...current, header }))}
           />
           <Field
             label="Sub-Header"
-            hint="หัวข้อรอง"
+            hint="Standfirst"
             value={fields.subHeader}
-            placeholder="คำโปรยสั้น ๆ"
+            placeholder="Short standfirst"
             multiline
             onChange={(subHeader) => setFields((current) => ({ ...current, subHeader }))}
           />
@@ -372,14 +374,14 @@ export function Studio() {
             onClick={download}
             disabled={downloading}
           >
-            {downloading ? "กำลังสร้างภาพ..." : "ดาวน์โหลด PNG"}
+            {downloading ? "Creating image..." : "Download PNG"}
           </button>
           <p className="studio__note">
-            ได้ไฟล์ {spec.width} × {spec.height} พิกเซล จากแม่แบบที่เลือก
+            Downloads a {spec.width} × {spec.height} pixel PNG of the selected template
           </p>
         </section>
 
-        <section className="studio__stage" aria-label="ภาพตัวอย่าง">
+        <section className="studio__stage" aria-label="Preview">
           <div className="studio__stage-frame" ref={frameRef}>
             <div
               className={
@@ -423,7 +425,7 @@ export function Studio() {
 
       {dragOver ? (
         <div className="drag-overlay">
-          <p>วางรูปเพื่อใช้ในแม่แบบ</p>
+          <p>Drop a photo to use it on the template</p>
         </div>
       ) : null}
     </div>
@@ -470,6 +472,88 @@ function Field({
       )}
     </div>
   );
+}
+
+type CaptureOptions = {
+  width: number;
+  height: number;
+  canvasWidth: number;
+  canvasHeight: number;
+  pixelRatio: number;
+  cacheBust: boolean;
+  skipAutoScale: boolean;
+  fontEmbedCSS: string;
+};
+
+function isOverlayNode(node: Node) {
+  return node instanceof HTMLImageElement && node.dataset.exportOverlay != null;
+}
+
+async function renderCard(article: HTMLElement, options: CaptureOptions) {
+  const { toCanvas } = await import("html-to-image");
+  const overlays = [...article.querySelectorAll<HTMLImageElement>("img[data-export-overlay]")];
+  const under = overlays.filter((img) => img.dataset.exportOverlay === "under");
+  const over = overlays.filter((img) => img.dataset.exportOverlay === "over");
+  const hidden: Array<[HTMLElement, string]> = [];
+
+  const hide = (element: HTMLElement) => {
+    hidden.push([element, element.style.visibility]);
+    element.style.visibility = "hidden";
+  };
+  const restore = () => {
+    for (const [element, visibility] of hidden) element.style.visibility = visibility;
+    hidden.length = 0;
+  };
+
+  const capture = (extra?: {
+    backgroundColor?: string;
+    style?: Partial<CSSStyleDeclaration>;
+  }) =>
+    toCanvas(article, {
+      ...options,
+      ...extra,
+      filter: (node: HTMLElement) => !isOverlayNode(node),
+    });
+
+  try {
+    if (under.length) {
+      article.querySelectorAll<HTMLElement>("[data-export-above-overlay]").forEach(hide);
+    }
+    const canvas = await capture();
+    restore();
+
+    const context = canvas.getContext("2d");
+    if (!context) throw new Error("empty image");
+    for (const img of under) {
+      context.drawImage(img, 0, 0, canvas.width, canvas.height);
+    }
+
+    if (under.length) {
+      article.querySelectorAll<HTMLElement>("[data-export-under-overlay]").forEach(hide);
+      const previousBackground = article.style.background;
+      const previousBackgroundColor = article.style.backgroundColor;
+      article.style.background = "transparent";
+      article.style.backgroundColor = "transparent";
+      try {
+        const text = await capture({
+          backgroundColor: "transparent",
+          style: { background: "transparent", backgroundColor: "transparent" },
+        });
+        context.drawImage(text, 0, 0);
+      } finally {
+        article.style.background = previousBackground;
+        article.style.backgroundColor = previousBackgroundColor;
+        restore();
+      }
+    }
+
+    for (const img of over) {
+      context.drawImage(img, 0, 0, canvas.width, canvas.height);
+    }
+    return canvas;
+  } finally {
+    restore();
+  }
 }
 
 function useFitScale(width: number, height: number) {
