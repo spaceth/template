@@ -2,6 +2,8 @@
 
 A browser-only studio for making Thai PBS Sci & Tech social and website images. Choose a template, add a photo and text, then download a PNG. Nothing is uploaded to a server.
 
+![Thai PBS Sci & Tech image templates](src/app/opengraph-image.jpg)
+
 ## Templates
 
 Each template is its own HTML and CSS file under `src/templates`, so the layout can be adjusted without changing the others.
